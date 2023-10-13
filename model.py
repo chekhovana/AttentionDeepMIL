@@ -36,14 +36,14 @@ class Attention(nn.Module):
         )
 
     def forward(self, x):
-        x = x.squeeze(0)
+        x = x.squeeze(0) # [N, 1, 28, 28] = [13, 1, 28, 28]
 
-        H = self.feature_extractor_part1(x)
-        H = H.view(-1, 50 * 4 * 4)
-        H = self.feature_extractor_part2(H)  # NxL
+        H = self.feature_extractor_part1(x) # [N, 50, 4, 5]
+        H = H.view(-1, 50 * 4 * 4) # [N, 800]
+        H = self.feature_extractor_part2(H)  # [N, L] = [13, 500]
 
-        A = self.attention(H)  # NxK
-        A = torch.transpose(A, 1, 0)  # KxN
+        A = self.attention(H)  # [N, K] = [13, 1]
+        A = torch.transpose(A, 1, 0)  # [K, N] = [1, 13]
         A = F.softmax(A, dim=1)  # softmax over N
 
         M = torch.mm(A, H)  # KxL

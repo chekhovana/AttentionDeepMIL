@@ -76,7 +76,6 @@ if args.cuda:
 
 optimizer = optim.Adam(model.parameters(), lr=args.lr, betas=(0.9, 0.999), weight_decay=args.reg)
 
-
 def train(epoch):
     model.train()
     train_loss = 0.
